@@ -17,12 +17,12 @@ import (
 	"signInWithApple/actions"
 )
 
-const AK = "AKIAUW65UPQ75PP2QUEF"               // AWS AK
-const SK = ""                                   // AWS SK
-const BUCKET = "creativiti-kids-server-testing" // AWS BUCKET Name
+const AK = "AKIAUW65UPQ75PP2QUEF"                // AWS AK
+const SK = ""                                    // AWS SK
+const BUCKET = "creativi-kids-server-testing-01" // AWS BUCKET Name
 const REGION = "ap-southeast-2"
-const uploadKey = "books/203b53f7-bd06-4a17-929e-c157a822b52a/Fpictures/WechatIMG903.jpg"
-const uploadFilename = "/home/ubuntu/WechatIMG903.jpg"
+const uploadFilename = "/home/docker/uwsgi-2.0.23.tar.gz"
+const uploadKey = "books/203b53f7-bd06-4a17-929e-c157a822b52a/pictures/uwsgi-2.0.23.tar.gz"
 
 var client *s3.Client
 
@@ -125,7 +125,6 @@ func RunPresigningScenario(sdkConfig aws.Config, httpRequester IHttpRequester) {
 	log.Println(strings.Repeat("-", 88))
 
 	log.Printf("Let's presign a request to upload a file to your bucket.")
-
 	uploadFile, err := os.Open(uploadFilename)
 	if err != nil {
 		panic(err)
