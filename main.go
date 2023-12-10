@@ -130,7 +130,8 @@ func RunPresigningScenario(sdkConfig aws.Config, httpRequester IHttpRequester) {
 		panic(err)
 	}
 	defer uploadFile.Close()
-	presignedPutRequest, err := presigner.PutObject(bucketName, uploadKey, 60)
+	taggings := "TagSet=[{Key=\"pageNo\", Value=12345}, {Key=\"Prompt\", Value=\"test with updated\"}"
+	presignedPutRequest, err := presigner.PutObject(bucketName, uploadKey, taggings, 60)
 	if err != nil {
 		panic(err)
 	}
