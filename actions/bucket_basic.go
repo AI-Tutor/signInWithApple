@@ -269,3 +269,29 @@ func (basics BucketBasics) DeleteBucket(bucketName string) error {
 
 // snippet-end:[gov2.s3.DeleteBucket]
 // snippet-end:[gov2.s3.BucketBasics.complete]
+
+func (basics BucketBasics) PutObjectTaggings(bucketName, objectKey string, tagging map[string]string) error {
+	tagSet := []types.Tag{}
+	for key, value := range tagging {
+		log.Printf("key: %v, value: %v\n", key, value)
+		tagSet = append(tagSet, types.Tag{
+			Key:   aws.String(key),
+			Value: aws.String(value),
+		})
+	}
+	log.Printf("tagSet: %s\n", tagSet)
+
+	putObjectTagginsInput := &s3.PutObjectTaggingInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(objectKey),
+		Tagging: &types.Tagging{
+			TagSet: tagSet,
+		},
+	}
+
+	_, err := basics.S3Client.PutObjectTagging(context.TODO(), putObjectTagginsInput)
+	if err != nil {
+		log.Printf("Couldn't put object taggings. Here's why: %v\n", err)
+	}
+	return err
+}

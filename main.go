@@ -69,6 +69,12 @@ func (httpReq HttpRequester) Delete(url string) (resp *http.Response, err error)
 	return http.DefaultClient.Do(delRequest)
 }
 
+type PictureTagging struct {
+	PageNo int    `json:"pageNo"`
+	Desc   string `json:"desc"`
+	Prompt string `json:"prompt"`
+}
+
 // snippet-end:[gov2.s3.IHttpRequester.helper]
 
 // snippet-start:[gov2.s3.Scenario_Presigning]
@@ -130,13 +136,13 @@ func RunPresigningScenario(sdkConfig aws.Config, httpRequester IHttpRequester) {
 		panic(err)
 	}
 	defer uploadFile.Close()
-	taggings := "TagSet=[{Key=\"pageNo\", Value=12345}, {Key=\"Prompt\", Value=\"test with updated\"}"
-	presignedPutRequest, err := presigner.PutObject(bucketName, uploadKey, taggings, 60)
+	presignedPutRequest, err := presigner.PutObject(bucketName, uploadKey, 60)
 	if err != nil {
 		panic(err)
 	}
 	log.Printf("Got a presigned %v request to URL:\n\t%v\n", presignedPutRequest.Method,
 		presignedPutRequest.URL)
+
 	log.Println("Using net/http to send the request...")
 	info, err := uploadFile.Stat()
 	if err != nil {
@@ -149,6 +155,13 @@ func RunPresigningScenario(sdkConfig aws.Config, httpRequester IHttpRequester) {
 	log.Printf("%v object %v with presigned URL returned %v.", presignedPutRequest.Method,
 		uploadKey, putResponse.StatusCode)
 	log.Println(strings.Repeat("-", 88))
+
+	log.Println("Let's tag the object we just uploaded.")
+	taggings := make(map[string]string)
+	taggings["pageNo"] = "12345"
+	taggings["prompt"] = "test with updated round2"
+	taggings["desc"] = "test with updated round2"
+	err = bucketBasics.PutObjectTaggings(bucketName, uploadKey, taggings)
 
 	log.Printf("Let's presign a request to download the object.")
 	presignedGetRequest, err := presigner.GetObject(bucketName, uploadKey, 60)
@@ -199,6 +212,7 @@ func main() {
 		Ak: AK,
 		Sk: SK,
 	}
+	// creds , _ := cred.Retrieve(context.Background())
 
 	cfg := aws.Config{
 		Region:                      REGION,
