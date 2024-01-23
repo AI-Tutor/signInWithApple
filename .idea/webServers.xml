@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="81867006-49cb-4876-99c0-21f33fad78f5" name="develop">
+        <fileTransfer rootFolder="/home/docker/goworkspace/src/" accessType="SFTP" host="3.106.222.121" port="22" sshConfigId="689cbc07-03e9-4fa3-86fa-659ea4df2bd5" sshConfig="ubuntu@3.106.222.121:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
